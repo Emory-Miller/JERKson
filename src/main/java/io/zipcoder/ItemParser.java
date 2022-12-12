@@ -9,20 +9,27 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ItemParser {
-    public List<Item> parseItemList(String valueToParse) throws ItemParseException {
+    public List<Item> parseItemList(String valueToParse)  {
         String lowerCase = valueToParse.toLowerCase();
         String[] delimString = lowerCase.split("##");
         List<Item> itemList = new ArrayList<>();
+
+
         for (String str : delimString) {
-            Item item = parseSingleItem(str);
-            itemList.add(item);
+            try {
+                Item item = parseSingleItem(str);
+                itemList.add(item);
+            } catch (ItemParseException e){}
         }
         return itemList;
     }
 
     public Item parseSingleItem(String singleItem) throws ItemParseException {
+
+        if( singleItem.contains(" ")) throw new ItemParseException();
+
         String lowerCase = singleItem.toLowerCase();
-        String[] str = lowerCase.split("[:;@\\^%#*]");
+        String[] str = lowerCase.split("[:;@\\^%#*!]");
 
         HashMap<String, String> hash = new HashMap<>();
         try {
@@ -33,11 +40,14 @@ public class ItemParser {
                     hash.put("name", " ");
                     throw new ItemParseException();
 
-                } else if (str[i].equals("price") && !str[i + 1].equals("type")) {
-                    hash.put("price", str[i + 1]);
                 } else if (str[i].equals("price") && str[i + 1].equals("type")) {
                     hash.put("price", "0.0");
                     throw new ItemParseException();
+                } else if (str[i].equals("price") && !str[i + 1].equals("type") && str[i+1].equals("")) {
+                    hash.put("price", "0.0");git a
+                    throw new ItemParseException();
+                } else if (str[i].equals("price") && !str[i + 1].equals("type")) {
+                    hash.put("price", str[i + 1]);
 
                 } else if (str[i].equals("type") && !str[i + 1].equals("expiration")) {
                     hash.put("type", str[i + 1]);

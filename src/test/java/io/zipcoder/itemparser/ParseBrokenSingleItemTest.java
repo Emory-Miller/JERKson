@@ -58,4 +58,16 @@ public class ParseBrokenSingleItemTest {
         // when
         itemParser.parseSingleItem(valueToParse); // throws exception
     }
+
+    @Test(expected = ItemParseException.class)
+    public void test6() throws ItemParseException {
+        // given
+        ItemParser itemParser = new ItemParser();
+        String valueToParse = "naMe:;price:;type:Food;expiration:1/04/2016##";
+
+        // when
+        itemParser.parseSingleItem(valueToParse); // throws exception
+    }
+
+
 }

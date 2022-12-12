@@ -1,6 +1,9 @@
 package io.zipcoder;
 
 import io.zipcoder.utils.FileReader;
+import io.zipcoder.utils.Item;
+
+import java.util.List;
 
 public class GroceryReporter {
     private final String originalFileText;
@@ -11,6 +14,9 @@ public class GroceryReporter {
 
     @Override
     public String toString() {
-        return null;
+        ItemParser ip = new ItemParser();
+        List<Item> itemList = ip.parseItemList(originalFileText);
+
+        return itemList.toString();
     }
 }
