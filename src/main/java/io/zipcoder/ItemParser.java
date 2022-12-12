@@ -32,8 +32,14 @@ public class ItemParser {
         String[] str = lowerCase.split("[:;@\\^%#*!]");
 
         HashMap<String, String> hash = new HashMap<>();
+
+        for (int i = 0; i <str.length; i++){
+            str[i] = cookieMonster(str[i]);
+        }
+
         try {
             for (int i = 0; i < str.length; i++) {
+
                 if (str[i].equals("name") && !str[i + 1].equals("price")) {
                     hash.put("name", str[i + 1]);
                 } else if (str[i].equals("name") && str[i + 1].equals("price")) {
@@ -44,7 +50,7 @@ public class ItemParser {
                     hash.put("price", "0.0");
                     throw new ItemParseException();
                 } else if (str[i].equals("price") && !str[i + 1].equals("type") && str[i+1].equals("")) {
-                    hash.put("price", "0.0");git a
+                    hash.put("price", "0.0");
                     throw new ItemParseException();
                 } else if (str[i].equals("price") && !str[i + 1].equals("type")) {
                     hash.put("price", str[i + 1]);
@@ -64,5 +70,11 @@ public class ItemParser {
             }
         } catch (IndexOutOfBoundsException e) {}
         return new Item (hash.get("name"), Double.parseDouble(hash.get("price")), hash.get("type"), hash.get("expiration"));
+    }
+
+    public String cookieMonster (String str){
+        if (str.equals("co0kies"))
+            return "cookies";
+        else return str;
     }
 }

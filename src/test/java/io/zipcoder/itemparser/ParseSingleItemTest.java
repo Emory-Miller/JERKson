@@ -97,4 +97,18 @@ public class ParseSingleItemTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void test7() throws ItemParseException {
+        // given
+        ItemParser itemParser = new ItemParser();
+        String valueToParse = "naMe:Co0kieS;pRice:2.25;type:Food;expiration:1/25/2016##";
+        Item expected = new Item("cookies", 2.25, "food", "1/25/2016");
+
+        // when
+        Item actual = itemParser.parseSingleItem(valueToParse);
+
+        // then
+        assertEquals(expected, actual);
+    }
+
 }
