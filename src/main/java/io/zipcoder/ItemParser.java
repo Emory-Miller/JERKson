@@ -5,6 +5,7 @@ import io.zipcoder.utils.ItemParseException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class ItemParser {
@@ -12,23 +13,46 @@ public class ItemParser {
         String lowerCase = valueToParse.toLowerCase();
         String[] delimString = lowerCase.split("##");
         List<Item> itemList = new ArrayList<>();
-        try {
-            for (String str : delimString) {
-                Item item = parseSingleItem(str);
-                itemList.add(item);
-            }
-        } catch ( ItemParseException e){
-            System.out.println("Error");
+        for (String str : delimString) {
+            Item item = parseSingleItem(str);
+            itemList.add(item);
         }
         return itemList;
     }
 
     public Item parseSingleItem(String singleItem) throws ItemParseException {
         String lowerCase = singleItem.toLowerCase();
-        String[] delimString = lowerCase.split("[:;@\\^%#]");
+        String[] str = lowerCase.split("[:;@\\^%#*]");
 
-        Item item = new Item(delimString[1], Double.parseDouble(delimString[3]), delimString[5], delimString[7]);
+        HashMap<String, String> hash = new HashMap<>();
+        try {
+            for (int i = 0; i < str.length; i++) {
+                if (str[i].equals("name") && !str[i + 1].equals("price")) {
+                    hash.put("name", str[i + 1]);
+                } else if (str[i].equals("name") && str[i + 1].equals("price")) {
+                    hash.put("name", " ");
+                    throw new ItemParseException();
 
-        return item;
+                } else if (str[i].equals("price") && !str[i + 1].equals("type")) {
+                    hash.put("price", str[i + 1]);
+                } else if (str[i].equals("price") && str[i + 1].equals("type")) {
+                    hash.put("price", "0.0");
+                    throw new ItemParseException();
+
+                } else if (str[i].equals("type") && !str[i + 1].equals("expiration")) {
+                    hash.put("type", str[i + 1]);
+                } else if (str[i].equals("type") && str[i + 1].equals("expiration")) {
+                    hash.put("type", " ");
+                    throw new ItemParseException();
+
+                } else if (str[i].equals("expiration") && i + 1 != str.length) {
+                    hash.put("expiration", str[i + 1]);
+                } else if (str[i].equals("expiration") && i + 1 == str.length) {
+                    hash.put("expiration", " ");
+                    throw new ItemParseException();
+                }
+            }
+        } catch (IndexOutOfBoundsException e) {}
+        return new Item (hash.get("name"), Double.parseDouble(hash.get("price")), hash.get("type"), hash.get("expiration"));
     }
 }
