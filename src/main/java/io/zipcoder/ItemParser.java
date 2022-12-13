@@ -11,7 +11,8 @@ import java.util.List;
 public class ItemParser {
 
     int errorCount = 0;
-    public List<Item> parseItemList(String valueToParse)  {
+
+    public List<Item> parseItemList(String valueToParse) {
         String lowerCase = valueToParse.toLowerCase();
         String[] delimString = lowerCase.split("##");
         List<Item> itemList = new ArrayList<>();
@@ -21,7 +22,7 @@ public class ItemParser {
             try {
                 Item item = parseSingleItem(str);
                 itemList.add(item);
-            } catch (ItemParseException e){
+            } catch (ItemParseException e) {
                 errorCount += 1;
             }
         }
@@ -29,20 +30,18 @@ public class ItemParser {
     }
 
 
-
-
     public Item parseSingleItem(String singleItem) throws ItemParseException {
 
-        if( singleItem.contains(" ")) throw new ItemParseException();
+        if (singleItem.contains(" ")) throw new ItemParseException();
 
-        if( singleItem.contains(":;")) throw new ItemParseException();
+        if (singleItem.contains(":;")) throw new ItemParseException();
 
         String lowerCase = singleItem.toLowerCase();
         String[] str = lowerCase.split("[:;@\\^%#*!]");
 
         HashMap<String, String> hash = new HashMap<>();
 
-        for (int i = 0; i <str.length; i++){
+        for (int i = 0; i < str.length; i++) {
             str[i] = cookieMonster(str[i]);
         }
 
@@ -58,7 +57,7 @@ public class ItemParser {
                 } else if (str[i].equals("price") && str[i + 1].equals("type")) {
                     hash.put("price", "0.0");
                     throw new ItemParseException();
-                } else if (str[i].equals("price") && !str[i + 1].equals("type") && str[i+1].equals("")) {
+                } else if (str[i].equals("price") && !str[i + 1].equals("type") && str[i + 1].equals("")) {
                     hash.put("price", "0.0");
                     throw new ItemParseException();
                 } else if (str[i].equals("price") && !str[i + 1].equals("type")) {
@@ -79,10 +78,10 @@ public class ItemParser {
             }
         } catch (IndexOutOfBoundsException e) {
         }
-        return new Item (hash.get("name"), Double.parseDouble(hash.get("price")), hash.get("type"), hash.get("expiration"));
+        return new Item(hash.get("name"), Double.parseDouble(hash.get("price")), hash.get("type"), hash.get("expiration"));
     }
 
-    public String cookieMonster (String str){
+    public String cookieMonster(String str) {
         if (str.equals("co0kies"))
             return "cookies";
         else return str;

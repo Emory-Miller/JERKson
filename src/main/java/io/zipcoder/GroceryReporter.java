@@ -20,7 +20,7 @@ public class GroceryReporter {
 
         Set<String> set = new LinkedHashSet<>();
 
-        for (Item item : itemList){
+        for (Item item : itemList) {
             if (!item.getName().equals("")) {
                 set.add(item.getName());
             }
@@ -30,12 +30,12 @@ public class GroceryReporter {
 
         Set<String> setCap = new LinkedHashSet<>();
 
-         for (String str :set){
-            String cap = str.substring(0,1).toUpperCase() + str.substring(1);
+        for (String str : set) {
+            String cap = str.substring(0, 1).toUpperCase() + str.substring(1);
             setCap.add(cap);
         }
 
-        for (String str : setCap){
+        for (String str : setCap) {
             sb.append(String.format("name:%8s \t\t seen: %d times\n", str, getSeenCount(str)));
             sb.append("============= 	 	 =============" + "\n");
             sb.append(printPrice(str));
@@ -47,37 +47,37 @@ public class GroceryReporter {
         return sb.toString();
     }
 
-    public int getSeenCount(String str){
+    public int getSeenCount(String str) {
         ItemParser ip = new ItemParser();
         List<Item> itemList = ip.parseItemList(originalFileText);
         int count = 0;
-        for (Item item : itemList){
-            if(item.getName().equals(str.toLowerCase())){
+        for (Item item : itemList) {
+            if (item.getName().equals(str.toLowerCase())) {
                 count++;
             }
         }
         return count;
     }
 
-    public String printPrice(String str){
+    public String printPrice(String str) {
         ItemParser ip = new ItemParser();
         List<Item> itemList = ip.parseItemList(originalFileText);
         List<Double> priceList = new ArrayList<>();
 
 
-        for (Item item : itemList){
-            if (item.getName().equals(str.toLowerCase())){
+        for (Item item : itemList) {
+            if (item.getName().equals(str.toLowerCase())) {
                 priceList.add(item.getPrice());
-                }
             }
+        }
 
         Collections.sort(priceList, Collections.reverseOrder());
 
         HashSet<Double> distinctPriceSet = new HashSet<>();
         HashMap<Double, Integer> keyCount = new HashMap<>();
 
-        for (int i = 0; i<priceList.size(); i++){
-            if(distinctPriceSet.add(priceList.get(i))){
+        for (int i = 0; i < priceList.size(); i++) {
+            if (distinctPriceSet.add(priceList.get(i))) {
                 keyCount.put(priceList.get(i), 1);
             } else {
                 keyCount.put(priceList.get(i), (Integer) (keyCount.get(priceList.get(i))) + 1);
@@ -88,13 +88,13 @@ public class GroceryReporter {
 
         StringBuilder sb = new StringBuilder();
 
-        if (str.equals("Milk")){
+        if (str.equals("Milk")) {
             Double first = keyList.get(0);
             Double second = keyList.get(1);
             sb.append(String.format("Price: \t%5s\t\t seen: %d times\n", first, keyCount.get(first)));
             sb.append("-------------\t\t -------------" + "\n");
             sb.append(String.format("Price: \t%5s\t\t seen: %d time\n", second, keyCount.get(second)));
-        } else if (keyCount.size() > 1){
+        } else if (keyCount.size() > 1) {
             Double first = keyList.get(0);
             Double second = keyList.get(1);
             sb.append(String.format("Price: \t%5s\t\t seen: %d times\n", first, keyCount.get(first)));
