@@ -22,7 +22,7 @@ public class ItemParser {
                 Item item = parseSingleItem(str);
                 itemList.add(item);
             } catch (ItemParseException e){
-                errorCount += 2;
+                errorCount += 1;
             }
         }
         return itemList;
@@ -34,6 +34,8 @@ public class ItemParser {
     public Item parseSingleItem(String singleItem) throws ItemParseException {
 
         if( singleItem.contains(" ")) throw new ItemParseException();
+
+        if( singleItem.contains(":;")) throw new ItemParseException();
 
         String lowerCase = singleItem.toLowerCase();
         String[] str = lowerCase.split("[:;@\\^%#*!]");
