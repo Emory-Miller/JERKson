@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ItemParser {
+
+    int errorCount = 0;
     public List<Item> parseItemList(String valueToParse)  {
         String lowerCase = valueToParse.toLowerCase();
         String[] delimString = lowerCase.split("##");
@@ -19,10 +21,15 @@ public class ItemParser {
             try {
                 Item item = parseSingleItem(str);
                 itemList.add(item);
-            } catch (ItemParseException e){}
+            } catch (ItemParseException e){
+                errorCount += 2;
+            }
         }
         return itemList;
     }
+
+
+
 
     public Item parseSingleItem(String singleItem) throws ItemParseException {
 
@@ -68,7 +75,8 @@ public class ItemParser {
                     throw new ItemParseException();
                 }
             }
-        } catch (IndexOutOfBoundsException e) {}
+        } catch (IndexOutOfBoundsException e) {
+        }
         return new Item (hash.get("name"), Double.parseDouble(hash.get("price")), hash.get("type"), hash.get("expiration"));
     }
 
