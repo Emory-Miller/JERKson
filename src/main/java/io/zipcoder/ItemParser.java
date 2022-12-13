@@ -45,39 +45,36 @@ public class ItemParser {
             str[i] = cookieMonster(str[i]);
         }
 
-        try {
-            for (int i = 0; i < str.length; i++) {
+        for (int i = 0; i < str.length; i++)
 
-                if (str[i].equals("name") && !str[i + 1].equals("price")) {
-                    hash.put("name", str[i + 1]);
-                } else if (str[i].equals("name") && str[i + 1].equals("price")) {
-                    hash.put("name", " ");
-                    throw new ItemParseException();
+            if (str[i].equals("name") && !str[i + 1].equals("price")) {
+                hash.put("name", str[i + 1]);
+            } else if (str[i].equals("name") && str[i + 1].equals("price")) {
+                hash.put("name", " ");
+                throw new ItemParseException();
 
-                } else if (str[i].equals("price") && str[i + 1].equals("type")) {
-                    hash.put("price", "0.0");
-                    throw new ItemParseException();
-                } else if (str[i].equals("price") && !str[i + 1].equals("type") && str[i + 1].equals("")) {
-                    hash.put("price", "0.0");
-                    throw new ItemParseException();
-                } else if (str[i].equals("price") && !str[i + 1].equals("type")) {
-                    hash.put("price", str[i + 1]);
+            } else if (str[i].equals("price") && str[i + 1].equals("type")) {
+                hash.put("price", "0.0");
+                throw new ItemParseException();
+            } else if (str[i].equals("price") && !str[i + 1].equals("type") && str[i + 1].equals("")) {
+                hash.put("price", "0.0");
+                throw new ItemParseException();
+            } else if (str[i].equals("price") && !str[i + 1].equals("type")) {
+                hash.put("price", str[i + 1]);
 
-                } else if (str[i].equals("type") && !str[i + 1].equals("expiration")) {
-                    hash.put("type", str[i + 1]);
-                } else if (str[i].equals("type") && str[i + 1].equals("expiration")) {
-                    hash.put("type", " ");
-                    throw new ItemParseException();
+            } else if (str[i].equals("type") && !str[i + 1].equals("expiration")) {
+                hash.put("type", str[i + 1]);
+            } else if (str[i].equals("type") && str[i + 1].equals("expiration")) {
+                hash.put("type", " ");
+                throw new ItemParseException();
 
-                } else if (str[i].equals("expiration") && i + 1 != str.length) {
-                    hash.put("expiration", str[i + 1]);
-                } else if (str[i].equals("expiration") && i + 1 == str.length) {
-                    hash.put("expiration", " ");
-                    throw new ItemParseException();
-                }
+            } else if (str[i].equals("expiration") && i + 1 != str.length) {
+                hash.put("expiration", str[i + 1]);
+            } else if (str[i].equals("expiration") && i + 1 == str.length) {
+                hash.put("expiration", " ");
+                throw new ItemParseException();
             }
-        } catch (IndexOutOfBoundsException e) {
-        }
+
         return new Item(hash.get("name"), Double.parseDouble(hash.get("price")), hash.get("type"), hash.get("expiration"));
     }
 
